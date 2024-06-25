@@ -1,0 +1,27 @@
+{
+    "name": "nigabrein/yii2-ckeditor5-widget",
+    "description": "Виджет для ckeditor5 для yii2",
+    "type": "yii2-extension",
+    "keywords": ["yii2","extension"," ckeditor"," ckeditor5"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nikita",
+            "email": "itanikobolow@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "~2.0.0"
+        
+    },
+    "extra": {
+        "npm": {
+            "ckeditor/ckeditor": "^5.0"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "nigabrein\\ckeditor5\\": ""
+        }
+    }
+}

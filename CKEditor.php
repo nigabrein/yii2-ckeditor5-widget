@@ -90,15 +90,17 @@ class CKEditor extends InputWidget
         }
         $clientOptions = Json::encode($this->clientOptions);
       
-        $js = new JsExpression(
-            "ClassicEditor.create( document.querySelector( '#{$this->options['id']}' ), {$clientOptions} ).then(
-                editor=>{
-                    console.log( editor );
-                    editor.setData(`{$this->value}`);
-                    window.editors = window.editors || {};
-                    window.editors['{$this->options['id']}'] = editor;
-                }
-            ).catch( error => {console.error( error );} );"
+ 	$js = new JsExpression(
+            "$(document).ready(function() {
+                ClassicEditor.create( document.querySelector( '#{$this->options['id']}' ), {$clientOptions} ).then(
+                    editor => {
+                        //console.log( editor );
+                        editor.setData(`{$this->value}`);
+                        window.editors = window.editors || {};
+                        window.editors['{$this->options['id']}'] = editor;
+                    }
+                ).catch( error => {console.error( error );} );
+            });"
         );
 
         $this->view->registerJs($js, \yii\web\View::POS_READY, 'ck-editor-' . $this->options['id']);

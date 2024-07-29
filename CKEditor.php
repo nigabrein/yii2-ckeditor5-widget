@@ -6,6 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\web\JsExpression;
 use yii\widgets\InputWidget;
+use Yii;
 
 /**
  * CKEditor renders a CKEditor5 js plugin for classic editing.
@@ -85,9 +86,17 @@ class CKEditor extends InputWidget
             $this->clientOptions['toolbar'] = $this->toolbar;
             $this->clientOptions['mediaEmbed'] = ['toolbar' => $this->toolbar];
         }
+	    
         if (!empty($this->uploadUrl)) {
-            $this->clientOptions['ckfinder'] = ['uploadUrl' => $this->uploadUrl];
+            $this->clientOptions['simpleUpload'] = [
+                'uploadUrl' => $this->uploadUrl,
+                'withCredentials' => true,
+                'headers' => [
+                    'X-CSRF-TOKEN' => Yii::$app->request->csrfToken,
+                ]
+            ];
         }
+	    
         $clientOptions = Json::encode($this->clientOptions);
       
  	$js = new JsExpression(

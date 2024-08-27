@@ -19,30 +19,30 @@ class CKEditor extends InputWidget
         'language'=> 'ru',
         'toolbar' => [
             'items' => [
-		'heading',
-		'|',
-		'bold',
-		'italic',
-		'link',
-		'bulletedList',
-		'numberedList',
-		'|',
-		'indent',
-		'outdent',
-		'|',
-		'imageUpload',
-		'blockQuote',
-		'insertTable',
-		'mediaEmbed',
-		'undo',
-		'redo',
-		'fontSize',
-		'fontFamily',
-		'fontColor',
-		'fontBackgroundColor',
-		'highlight',
-		'imageInsert',
-		'alignment'
+        'heading',
+        '|',
+        'bold',
+        'italic',
+        'link',
+        'bulletedList',
+        'numberedList',
+        '|',
+        'indent',
+        'outdent',
+        '|',
+        'imageUpload',
+        'blockQuote',
+        'insertTable',
+        'mediaEmbed',
+        'undo',
+        'redo',
+        'fontSize',
+        'fontFamily',
+        'fontColor',
+        'fontBackgroundColor',
+        'highlight',
+        'imageInsert',
+        'alignment'
             ],
         ]
     ];
@@ -52,6 +52,8 @@ class CKEditor extends InputWidget
     public $uploadUrl;
     
     public $value = null;
+    
+    public $autofocus = false;
     
     /**
      * @inheritdoc
@@ -86,7 +88,7 @@ class CKEditor extends InputWidget
             $this->clientOptions['toolbar'] = $this->toolbar;
             $this->clientOptions['mediaEmbed'] = ['toolbar' => $this->toolbar];
         }
-	    
+        
         if (!empty($this->uploadUrl)) {
             $this->clientOptions['simpleUpload'] = [
                 'uploadUrl' => $this->uploadUrl,
@@ -96,13 +98,22 @@ class CKEditor extends InputWidget
                 ]
             ];
         }
-	    
+        
+        $focus = null;
+        if (!empty($this->autofocus)) {
+            if($this->autofocus == true){
+                $focus = 'editor.autofocus = true;';
+            }
+        }
+        
         $clientOptions = Json::encode($this->clientOptions);
       
- 	$js = new JsExpression(
+    $js = new JsExpression(
             "ClassicEditor.create( document.querySelector( '#{$this->options['id']}' ), {$clientOptions} ).then(
                     editor => {
                         //console.log( editor );
+                        {$focus}
+                            
                         editor.setData(`{$this->value}`);
                         window.editors = window.editors || {};
                         window.editors['{$this->options['id']}'] = editor;
